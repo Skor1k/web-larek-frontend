@@ -1,5 +1,15 @@
+import { Model } from '../components/base/model';
+
 export function pascalToKebab(value: string): string {
     return value.replace(/([a-z0–9])([A-Z])/g, "$1-$2").toLowerCase();
+}
+
+export const isModel = (obj: unknown): obj is Model<any> => {
+	return obj instanceof Model;
+};
+
+export function formatNumber(x: number, sep = ' ') {
+	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, sep);
 }
 
 export function isSelector(x: any): x is string {

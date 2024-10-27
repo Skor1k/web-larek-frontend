@@ -23,11 +23,12 @@ export interface ICard {
 	id: string;
 }
 
-
 // Действие с карточкой
 export interface ICardActions {
 	onClick: (event: MouseEvent) => void;
 }
+
+
 
 // Корзина
 export interface IBasket {
@@ -45,7 +46,16 @@ export interface IOrder {
 	payment: string;
 }
 
-//Карточки types
+// Типы
+// Категории карточки
+export type CardCategory = 'софт-скилл' | 'хард-скилл' | 'дополнительное'	| 'кнопка' | 'другое';
+
+// Карточки для главной
+export type TCardPage = Pick<ICard, 'image' | 'category' | 'title' | 'price' | 'id'>;
+
+// Карточки для корзины
+export type TCardBasket = Pick<ICard, 'title' | 'price' | 'id'>;
+
 // Тип оплаты
 export type PaymentMethod = 'онлайн' | '' | 'при получении';
 
@@ -60,12 +70,6 @@ export type TOrderField = TOrderContacts & TOrderPayment;
 
 // Тип ошибок форм
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
-
-// Интерфейс успешной оплаты
-export interface IOrderResults {
-	id: string;
-	total: number;
-}
 
 // Слой представления
 // Интерфейс страницы
@@ -92,4 +96,10 @@ export interface ISuccess {
 
 export interface ISuccessActions {
 	onClick: () => void;
+}
+
+// Интерфейс успешной оплаты
+export interface IOrderResults {
+	id: string;
+	total: number;
 }
