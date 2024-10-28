@@ -28,11 +28,9 @@ export interface ICardActions {
 	onClick: (event: MouseEvent) => void;
 }
 
-
-
 // Корзина
 export interface IBasket {
-	items: HTMLElement[];
+	items: TCardBasket[];
 	total: number | null;
 }
 
@@ -91,6 +89,7 @@ export interface IForm {
 
 // Интерфейс успешного заказа
 export interface ISuccess {
+  id: string;
 	total: number;
 }
 

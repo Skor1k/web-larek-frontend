@@ -8,10 +8,6 @@ export const isModel = (obj: unknown): obj is Model<any> => {
 	return obj instanceof Model;
 };
 
-export function formatNumber(x: number, sep = ' ') {
-	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, sep);
-}
-
 export function isSelector(x: any): x is string {
     return (typeof x === "string") && x.length > 1;
 }
