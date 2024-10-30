@@ -7,7 +7,7 @@ export class Success extends Component<ISuccess> {
 	protected _close: HTMLElement;
 	protected _total: HTMLElement;
 
-	constructor(container: HTMLElement, actions: ISuccessActions) {
+	constructor(container: HTMLElement, actions?: ISuccessActions) {
 		super(container);
 
     this._close = ensureElement<HTMLElement>(
@@ -25,7 +25,7 @@ export class Success extends Component<ISuccess> {
 		}
 	}
 
-	set total(total: number) {
+	set total(total: number | string) {
 		this.setText(this._total, `Списано ${total} синапсов`);
 	}
 }

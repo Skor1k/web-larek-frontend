@@ -1,132 +1,111 @@
-import { FormErrors, ICard, IOrder, TOrderField } from '../types';
+import { IProductCard, IOrder, IOrderForm, IContacts, IContactsForm, ErrorsContacts, ErrorsOrder,} from '../types';
 import { Model } from './base/model';
 
-export interface IAppState {
-	list: ICard[];
-	preview: string | null;
-	basket: ICard[];
-	order: IOrder | null;
+export type CatalogChangeEvent = {
+	catalog: ProductCard[];
+};
+
+export type ProductStatus = 'basket' | 'sell';
+
+export class ProductCard extends Model<IProductCard> {
+	id: string;
+	description: string;
+	image: string;
+	title: string;
+	category: string;
+	price: number | null;
+	status: ProductStatus = 'sell';
+	count: number;
 }
 
-export class AppState extends Model<IAppState> {
-	catalog: ICard[] = [];
-	basket: ICard[] = [];
-	preview: string | null;
+export class AppState extends ProductCard {
+	basketList: ProductCard[] = [];
+	catalog: ProductCard[];
 	order: IOrder = {
-		total: 0,
+		address: '',
 		items: [],
+		payment: 'online',
 		email: '',
 		phone: '',
-		address: '',
-		payment: '',
+		total: 0,
 	};
-	formErrors: FormErrors = {};
 
-	setCatalog(items: ICard[]) {
-		items.forEach((item) => (this.catalog = [...this.catalog, item]));
-		this.emitChanges('cards:changed', { catalog: this.catalog });
-	}
-
-	setPreview(item: ICard) {
-		this.preview = item.id;
-		this.emitChanges('preview:changed', item);
-	}
-
-	getButtonStatus(item: ICard) {
-		if (item.price === null) {
-			return 'Не для продажи';
-		}
-		if (!this.basket.some((card) => card.id == item.id)) {
-			return 'Добавить в корзину';
-		} else {
-			return 'Убрать из корзины';
-		}
-	}
-
-	toggleBasketCard(item: ICard) {
-		return !this.basket.some((card) => card.id === item.id)
-			? this.addCardToBasket(item)
-			: this.deleteCardFromBasket(item);
-	}
-
-	addCardToBasket(item: ICard) {
-		this.basket = [...this.basket, item];
-		this.emitChanges('basket:changed');
-	}
-
-	deleteCardFromBasket(item: ICard) {
-		this.basket = this.basket.filter((card) => card.id !== item.id);
-		this.emitChanges('basket:changed');
-	}
-
-	getCardIndex(item: ICard) {
-		return Number(this.basket.indexOf(item)) + 1;
-	}
+	formErrorsOrder: ErrorsOrder = {};
+	formErrorsContacts: ErrorsContacts = {};
 
 	clearBasket() {
-		this.basket = [];
-		this.emitChanges('basket:changed');
+		this.basketList.forEach((item) => {
+			item.status = 'sell';
+		});
+		this.basketList = [];
 	}
 
-	clearOrder() {
-		this.order = {
-			total: 0,
-			items: [],
-			email: '',
-			phone: '',
-			address: '',
-			payment: '',
-		};
+	getTotal() {
+		return this.basketList.reduce((a, c) => a + c.price, 0);
 	}
 
-	setBasketToOrder() {
-		this.order.items = this.basket.map((card) => card.id);
-		this.order.total = this.getBasketTotal();
+	setCatalog(items: IProductCard[]) {
+		this.catalog = items.map((item) => new ProductCard(item, this.events));
+		this.emitChanges('catalog:install', { catalog: this.catalog });
 	}
 
-	getBasketTotal() {
-		return this.basket.reduce((total, card) => total + card.price, 0);
-	}
-
-	setOrderPayment(value: string) {
-		this.order.payment = value;
-	}
-
-	setOrderAddress(value: string) {
-		this.order.address = value;
-	}
-
-	setOrderPhone(value: string) {
-		this.order.phone = value;
-	}
-
-	setOrderEmail(value: string) {
-		this.order.email = value;
-	}
-
-	setOrderField(field: keyof TOrderField, value: string) {
+	setOrderField(field: keyof IOrderForm, value: string) {
 		this.order[field] = value;
-		this.validateOrder();
+
+		if (this.validateOrder()) {
+			this.events.emit('order:ready', this.order);
+		}
 	}
 
 	validateOrder() {
-		const errors: typeof this.formErrors = {};
+		const errors: typeof this.formErrorsOrder = {};
+
+		if (!this.order.address) {
+			errors.address = 'Необходимо указать адрес';
+		}
+		this.formErrorsOrder = errors;
+		this.events.emit('formErrorsOrder:change', this.formErrorsOrder);
+
+		return Object.keys(errors).length === 0;
+	}
+
+	setContactsField(field: keyof IContactsForm, value: string) {
+		this.order[field] = value;
+		if (this.validateContacts()) {
+			this.events.emit('contacts:ready', this.order);
+		}
+	}
+
+	validateContacts() {
+		const errors: typeof this.formErrorsContacts = {};
 
 		if (!this.order.email) {
-			errors.email = `Необходимо указать почту`;
+			errors.email = 'Необходимо указать email';
 		}
 		if (!this.order.phone) {
-			errors.phone = `Необходимо указать номер телефона`;
+			errors.phone = 'Необходимо указать телефон';
 		}
-		if (!this.order.address) {
-			errors.address = `Необходимо указать адрес`;
-		}
-		if (!this.order.payment) {
-			errors.payment = `Необходимо указать способ оплаты`;
-		}
+		this.formErrorsContacts = errors;
+		this.events.emit('formErrorsContacts:change', this.formErrorsContacts);
 
-		this.formErrors = errors;
-		this.events.emit('formErrors:changed', this.formErrors);
 		return Object.keys(errors).length === 0;
+	}
+
+	toggleBasketList(item: ProductCard) {
+		if (item.status === 'sell' && item.price !== null) {
+			this.basketList.push(item);
+			item.status = 'basket';
+			item.count = this.basketList.length;
+			this.emitChanges('basket:changed', this.basketList);
+		} else if (item.status === 'basket') {
+			this.basketList = this.basketList.filter((it) => it !== item);
+			item.status = 'sell';
+			item.count = this.basketList.length;
+			this.emitChanges('basket:changed', this.basketList);
+		}
+	}
+
+	getBasketList(): ProductCard[] {
+		return this.basketList;
 	}
 }

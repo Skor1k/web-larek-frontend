@@ -23,8 +23,8 @@ export class Form<T> extends Component<IForm> {
 			this.onInputChange(field, value);
 		});
 
-		this.container.addEventListener('submit', (e: Event) => {
-			e.preventDefault();
+		this.container.addEventListener('submit', (event: Event) => {
+			event.preventDefault();
 			this.events.emit(`${this.container.name}:submit`);
 		});
 
@@ -32,7 +32,7 @@ export class Form<T> extends Component<IForm> {
 	}
 
 	set valid(value: boolean) {
-		this._submit.disabled = !value;
+		this.setDisabled(this._submit, !value);
 	}
 
 	set errors(value: string) {
@@ -40,15 +40,19 @@ export class Form<T> extends Component<IForm> {
 	}
 
 	protected onInputChange(field: keyof T, value: string) {
-		this.events.emit(`order.${String(field)}:changed`, {
+		this.events.emit(`${this.container.name}.${String(field)}:change`, {
 			field,
 			value,
 		});
 	}
 
-	clearValue() {
-		this.container.reset();
-	}
+	toggleClass(element: HTMLElement, className: string, force?: boolean) {
+    if (force === undefined) {
+        element.classList.toggle(className);
+    } else {
+        element.classList.toggle(className, force);
+    }
+  }
 
 	render(state: Partial<T> & IForm) {
 		const { valid, errors, ...inputs } = state;
