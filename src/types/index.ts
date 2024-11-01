@@ -57,28 +57,6 @@ export interface IContacts extends IContactsForm {
 	items: string[];
 }
 
-// Типы
-// // Категории карточки
-// export type CardCategory = 'софт-скилл' | 'хард-скилл' | 'дополнительное'	| 'кнопка' | 'другое';
-
-// // Карточки для главной
-// export type TCardPage = Pick<ICard, 'image' | 'category' | 'title' | 'price' | 'id'>;
-
-// // Карточки для корзины
-// export type TCardBasket = Pick<ICard, 'title' | 'price' | 'id'>;
-
-// // Тип оплаты
-// export type PaymentMethod = 'онлайн' | '' | 'при получении';
-
-// // Тип с адресом
-// export type TOrderPayment = Pick<IOrder, 'payment' | 'address'>;
-
-// // Тип с почтой и телефоном
-// export type TOrderContacts = Pick<IOrder, 'email' | 'phone'>;
-
-// // Общий тип
-// export type TOrderField = TOrderContacts & TOrderPayment;
-
 // Тип ошибок форм
 export type ErrorsOrder = Partial<Record<keyof IOrder, string>>;
 export type ErrorsContacts = Partial<Record<keyof IContacts, string>>;
