@@ -9,11 +9,7 @@ export class OrderForm extends Form<IOrderForm> {
 	protected _cardButton: HTMLButtonElement;
 	protected _cashButton: HTMLButtonElement;
 
-	constructor(
-		container: HTMLFormElement,
-		events: IEvents,
-		actions?: ICardActions
-	) {
+	constructor(container: HTMLFormElement,	events: IEvents, actions?: ICardActions) {
 		super(container, events);
 
 		this._cardButton = ensureElement<HTMLButtonElement>(
