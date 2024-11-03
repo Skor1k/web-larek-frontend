@@ -4,7 +4,6 @@ export abstract class Component<T> {
 
 	// Переключить класс
 	toggleClass(element: HTMLElement, className: string, force?: boolean) {
-		// element.classList.toggle(className, force);
 		if (force === undefined) {
 			element.classList.toggle(className);
 		} else {

@@ -45,14 +45,6 @@ export class Form<T> extends Component<IForm> {
 		});
 	}
 
-	// toggleClass(element: HTMLElement, className: string, force?: boolean) {
-	//   if (force === undefined) {
-	//       element.classList.toggle(className);
-	//   } else {
-	//       element.classList.toggle(className, force);
-	//   }
-	// }
-
 	render(state: Partial<T> & IForm) {
 		const { valid, errors, ...inputs } = state;
 		super.render({ valid, errors });
