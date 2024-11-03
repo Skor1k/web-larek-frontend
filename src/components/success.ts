@@ -1,7 +1,6 @@
-import { Component } from '../base/component';
-import { ISuccess, ISuccessActions } from '../../types';
-import { ensureElement } from '../../utils/utils';
-
+import { Component } from './base/component';
+import { ISuccess, ISuccessActions } from '../types';
+import { ensureElement } from '../utils/utils';
 
 export class Success extends Component<ISuccess> {
 	protected _close: HTMLElement;
@@ -10,7 +9,7 @@ export class Success extends Component<ISuccess> {
 	constructor(container: HTMLElement, actions?: ISuccessActions) {
 		super(container);
 
-    this._close = ensureElement<HTMLElement>(
+		this._close = ensureElement<HTMLElement>(
 			'.order-success__close',
 			this.container
 		);

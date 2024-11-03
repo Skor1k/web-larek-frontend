@@ -3,7 +3,6 @@ import { IEvents } from '../base/events';
 import { IForm } from '../../types';
 import { ensureElement } from '../../utils/utils';
 
-
 export class Form<T> extends Component<IForm> {
 	protected _submit: HTMLButtonElement;
 	protected _errors: HTMLElement;
@@ -28,7 +27,7 @@ export class Form<T> extends Component<IForm> {
 			this.events.emit(`${this.container.name}:submit`);
 		});
 
-    this._errors = ensureElement<HTMLElement>('.form__errors', this.container);
+		this._errors = ensureElement<HTMLElement>('.form__errors', this.container);
 	}
 
 	set valid(value: boolean) {
@@ -46,13 +45,13 @@ export class Form<T> extends Component<IForm> {
 		});
 	}
 
-	toggleClass(element: HTMLElement, className: string, force?: boolean) {
-    if (force === undefined) {
-        element.classList.toggle(className);
-    } else {
-        element.classList.toggle(className, force);
-    }
-  }
+	// toggleClass(element: HTMLElement, className: string, force?: boolean) {
+	//   if (force === undefined) {
+	//       element.classList.toggle(className);
+	//   } else {
+	//       element.classList.toggle(className, force);
+	//   }
+	// }
 
 	render(state: Partial<T> & IForm) {
 		const { valid, errors, ...inputs } = state;

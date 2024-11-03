@@ -2,17 +2,17 @@
 // Карточки
 export interface ICardList {
 	items: ICard[];
-  total: number;
+	total: number;
 }
 
 // Карточка товара
 export interface IProductCard {
-  image: string;
-  category: string;
-  title: string;
-  description: string;
-  button: string;
-  price: number | null;
+	image: string;
+	category: string;
+	title: string;
+	description: string;
+	button: string;
+	price: number | null;
 	id: string;
 }
 
@@ -61,11 +61,10 @@ export interface IContacts extends IContactsForm {
 export type ErrorsOrder = Partial<Record<keyof IOrder, string>>;
 export type ErrorsContacts = Partial<Record<keyof IContacts, string>>;
 
-
 // Слой представления
 // Интерфейс страницы
 export interface IPage {
-  catalog: HTMLElement[];
+	catalog: HTMLElement[];
 	locked: boolean;
 }
 
@@ -77,12 +76,12 @@ export interface IModalData {
 // Интерфейс форм
 export interface IForm {
 	errors: string[];
-  valid: boolean;
+	valid: boolean;
 }
 
 // Интерфейс успешного заказа
 export interface ISuccess {
-  id: string;
+	id: string;
 	total: number;
 }
 

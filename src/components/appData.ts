@@ -1,4 +1,12 @@
-import { IProductCard, IOrder, IOrderForm, IContacts, IContactsForm, ErrorsContacts, ErrorsOrder,} from '../types';
+import {
+	IProductCard,
+	IOrder,
+	IOrderForm,
+	IContacts,
+	IContactsForm,
+	ErrorsContacts,
+	ErrorsOrder,
+} from '../types';
 import { Model } from './base/model';
 
 export type CatalogChangeEvent = {

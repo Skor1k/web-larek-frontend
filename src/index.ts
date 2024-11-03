@@ -8,10 +8,10 @@ import { WebLarekAPI } from './components/webLarekAPI';
 import { API_URL, CDN_URL, paymentMethods } from './utils/constants';
 import { IOrder, IOrderForm, IContactsForm } from './types';
 import { Modal } from './components/common/modal';
-import { Basket } from './components/common/basket';
+import { Basket } from './components/basket';
 import { OrderForm } from './components/order';
 import { Contacts } from './components/contacts';
-import { Success } from './components/common/success';
+import { Success } from './components/success';
 
 const events = new EventEmitter();
 const api = new WebLarekAPI(CDN_URL, API_URL);
@@ -222,6 +222,4 @@ events.on('contacts:submit', () => {
 api
 	.getProductList()
 	.then(appData.setCatalog.bind(appData))
-	.catch((err) => {
-		console.error(err);
-	});
+	.catch(console.error);

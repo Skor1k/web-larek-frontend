@@ -11,7 +11,7 @@ export abstract class Model<T> {
 		Object.assign(this, data);
 	}
 
-  // Изменение модели
+	// Изменение модели
 	emitChanges(event: string, payload?: object) {
 		this.events.emit(event, payload ?? {});
 	}
